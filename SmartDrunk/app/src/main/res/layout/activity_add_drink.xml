@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    tools:context="tk.smartdrunk.smartdrunk.AddDrinkActivity">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/add_drink"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryHeadLight"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <EditText
+        android:id="@+id/drinkVolumeEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:digits="0123456789"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/volume_of_drinl_ml"
+        android:inputType="number"
+        android:maxLength="4"
+        android:textColor="@color/black"
+        android:textSize="22sp" />
+
+    <EditText
+        android:id="@+id/alcoholVolumeEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:digits="0123456789."
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/volume_of_alcohol"
+        android:inputType="number"
+        android:maxLength="4"
+        android:textSize="22sp" />
+
+    <EditText
+        android:id="@+id/drinkNumberEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:digits="123456789"
+        android:maxLength="1"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/number_of_drinks"
+        android:inputType="numberDecimal"
+        android:textSize="22sp" />
+
+    <CheckBox
+        android:id="@+id/isLastDrinkCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:shadowColor="@color/colorPrimaryHeadBar"
+        android:text="@string/close_my_tab_this_is_my_last_drink"
+        android:textColor="@color/colorPrimaryDark2"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/drinkTypeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/drinkServingSizeTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22sp" />
+
+    <Button
+        android:id="@+id/addDrinkButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryHeadLight"
+        android:gravity="center"
+        android:text="@string/add_this_drink_to_my_tab"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

@@ -1,0 +1,100 @@
+<resources>
+    <string name="app_name">SmartDrunk</string>
+
+
+    <!-- Strings related to navigation drawer menu-->
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="statistics_title">statistics</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="statistics">Statistics</string>
+    <string name="info_credits"><![CDATA[Info & Credits]]></string>
+    <string name="settings">Settings</string>
+    <string name="can_i_drive">Can I Drive?</string>
+    <string name="title_activity_info">Info</string>
+    <string name="the_hangover_feature">Hangover Protector</string>
+
+
+    <!-- Strings related to the signIn layout-->
+    <string name="sign_up">Sign up</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_email">Email</string>
+    <string name="sign_in">Sign in</string>
+    <string name="smartdrunk">SmartDrunk</string>
+    <string name="Weight_kg">Weight(kg)</string>
+    <string name="gender">Gender:</string>
+    <string name="female">Female</string>
+    <string name="app_logo">App Logo</string>
+    <string name="date_of_birth">Date of Birth:(MM.dd.yyyy)</string>
+    <string name="year_of_birth">Year of birth</string>
+    <string name="other">Other</string>
+    <string name="male">Male</string>
+    <string name="new_driver">New Driver:</string>
+
+
+    <!-- Strings related to Info -->
+    <string name="link_to_site">https://www.vecteezy.com</string>
+    <string name="credit_to_site">Logo Vector Illustration by Vecteezy(autor freevector)</string>
+    <string name="alon_dankner_daniel_glazer"><![CDATA[  Alon Dankner & Daniel Glazer]]></string>
+    <string name="developers">Developers:</string>
+    <string name="credits">Credits:</string>
+    <string name="warnings">Warnings!</string>
+    <string name="smartdrunk_application_info">SmartDrunk Application Info</string>
+    <string name="guidance_ibrahim_jubran">Guidance: Ibrahim Jubran</string>
+    <string name="contact"><a href="mailto:someone@example.com?Subject=Hello%20again" target="_top">Contact Us!</a></string>
+    <string name="warning">Please remember that our appliction can only estimate your BAC and that you should not drive after drinking any amount of alcohol!!!</string>
+    <string name="info">This application was developed as a part of final project in our BSc degree in Computer Science. and its objective is to make drivers more aware to thier driving habbits.</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="contact_us">Contact Us!</string>
+
+    <string name="weight_kg">Weight (kg):</string>
+    <string name="togglebutton">ToggleButton</string>
+
+    <string name="age">Age:</string>
+    <string name="button">Button</string>
+    <string name="save">Save</string>
+    <string name="password">Password</string>
+    <string name="country" />
+    <string name="genderMale">Male</string>
+    <string name="login">Login</string>
+    <string name="Inputpassword">Password</string>
+    <string name="username">Username</string>
+
+    <!-- Strings related to HomeFragment Screen-->
+    <string name="home_title">Home</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="emergency_options">Emergency Options</string>
+    <string name="emergency_call">Emergency Call</string>
+    <string name="emergency_text">Emergency Text</string>
+    <string name="birth_date">Birth Date:</string>
+    <string name="gender_word">gender</string>
+    <string name="update_profile">Update profile</string>
+    <string name="reset_my_password_please">Reset my password please!</string>
+    <string name="delete_user">Delete user</string>
+    <string name="add_drink">Add Drink</string>
+    <string name="the_volume_of_alcohol_in_the_drink">The volume of alcohol in the drink:(%)</string>
+    <string name="add_this_drink_to_my_tab">Add this drink to my tab!</string>
+    <string name="close_my_tab_this_is_my_last_drink">Close my tab - This is my last drink!</string>
+    <string name="the_volume_of_the_drink_ml">The volume of the drink(ml)</string>
+    <string name="number_of_drinks">Number of drinks</string>
+    <string name="drink_serving_size">Drink Serving Size:</string>
+    <string name="possible_alcoholic_beverages">Possible Alcoholic Beverages:</string>
+    <!--Those are the text for the Share option in the app-->
+    <string name="share_email_native">I want to let you know about new exciting app I stumbled into called SmartDrunk.
+    Check it out :</string>
+    <string name="share_email_subject">New exciting app called SmartDrunk</string>
+    <string name="share_chooser_text">Share SmartDrunk with your friends!</string>
+    <string name="share_twitter">heloo3</string>
+    <string name="share_facebook">heloo2</string>
+    <string name="share_sms">heloo1</string>
+    <string name="share_email_gmail">heloo</string>
+    <string name="volume_of_drinl_ml">Volume of drinl(ml)</string>
+    <string name="volume_of_alcohol">Volume of alcohol(%)</string>
+</resources>

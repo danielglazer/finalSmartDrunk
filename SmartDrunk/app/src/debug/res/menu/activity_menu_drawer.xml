@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:SmartDrunk="http://schemas.android.com/tools">
+
+
+    <!--This is the app menu-->
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_action_bar"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_action_profile"
+            android:title="@string/profile" />
+        <item
+            android:id="@+id/nav_statistics"
+            android:icon="@drawable/ic_action_statistics"
+            android:title="@string/statistics" />
+        <item
+            android:id="@+id/nav_Driver"
+            android:icon="@drawable/ic_action_drive"
+            android:title="@string/can_i_drive" />
+        <item
+            android:id="@+id/nav_Hangover"
+            android:icon="@drawable/ic_action_hangover"
+            android:title="@string/the_hangover_feature" />
+        <item
+            android:id="@+id/nav_Info"
+            android:icon="@drawable/ic_info_black_24dp"
+            android:title="@string/info_credits"/>
+    </group>
+    <item android:title="Options">
+        <menu>
+            <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="@string/settings" />
+            <item
+                android:id="@+id/nav_signOut"
+                android:icon="@drawable/ic_action_name"
+                android:title="Sign out" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share"
+                android:actionProviderClass=
+                    "android.widget.ShareActionProvider"/>
+            <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/nav_Emergency_Contact"
+                android:icon="@drawable/ic_action_contact"
+                android:title="Emergency Contact" />
+            </group>
+        </menu>
+    </item>
+</menu>
