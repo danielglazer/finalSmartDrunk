@@ -52,13 +52,15 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
     private Button update,delete;
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
+    private boolean isFirstDataChange;
     View my_view;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         my_view = inflater.inflate(R.layout.activity_profile, container, false);
-
+        isFirstDataChange = true;
         mAuth = FirebaseAuth.getInstance();
         mEmailField = (EditText) my_view.findViewById(R.id.field_email);
         mPasswordField = (EditText) my_view.findViewById(R.id.field_password);
@@ -75,12 +77,14 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-                if (user!=null) {
-                    mWeightField.setText(String.valueOf(user.weight));
-                    genderTextView.setText("BirthDate:   " + user.gender);
-                    mBirthDateField.setText("Gender:   " + user.birthDate);
-                    newDriverSwitch.setChecked(user.newDriver);
-                    contactNumber.setText(user.emergencyContact);
+                if (user!=null && isFirstDataChange) {
+                    isFirstDataChange = false;
+                    mEmailField.setText(user.getEmail());
+                    mWeightField.setText(String.valueOf(user.getWeight()));
+                    genderTextView.setText("BirthDate:   " + user.getGender());
+                    mBirthDateField.setText("Gender:   " + user.getBirthDate());
+                    newDriverSwitch.setChecked(user.isNewDriver());
+                    contactNumber.setText(user.getEmergencyContact());
                 }
             }
 
@@ -122,28 +126,29 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
         if (!validateForm()) {
             return;
         }
-        user.newDriver = newDriverSwitch.isChecked();
-        user.emergencyContact = contactNumber.getText().toString();
-        user.weight = Double.parseDouble(mWeightField.getText().toString());
+        user.setNewDriver(newDriverSwitch.isChecked());
+        user.setEmergencyContact(contactNumber.getText().toString());
+        user.setWeight(Double.parseDouble(mWeightField.getText().toString()));
 
 
         FirebaseUser firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
-
-        firebaseuser.updateEmail(mEmailField.getText().toString())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            user.email = mEmailField.getText().toString();
-                            update();
-                            Log.d(TAG, "User email address updated.");
-                            Toast.makeText(getActivity().getApplicationContext(),
-                                    "User email updated.", Toast.LENGTH_SHORT).show();
+        if(!user.getEmail().equals(mEmailField.getText().toString())) {
+            firebaseuser.updateEmail(mEmailField.getText().toString())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                user.setEmail(mEmailField.getText().toString());
+                                update();
+                                Log.d(TAG, "User email address updated.");
+                                Toast.makeText(getActivity().getApplicationContext(),
+                                        "User email updated.", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        }
         update();
-        if (TextUtils.isEmpty(mPasswordField.getText().toString()) == false) {
+        if (!TextUtils.isEmpty(mPasswordField.getText().toString())) {
             firebaseuser.updatePassword(mPasswordField.getText().toString())
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -152,6 +157,11 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
                                 Log.d(TAG, "User password updated.");
                                 Toast.makeText(getActivity().getApplicationContext(),
                                         "User password updated.", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Log.d(TAG, "User password update failed.");
+                                Toast.makeText(getActivity().getApplicationContext(),
+                                        "Password update failed.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -230,7 +240,7 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
 
     protected boolean validateForm() {
         boolean result = true;
-        if (TextUtils.isEmpty(mEmailField.getText().toString()) && mEmailField.getText().toString().contains("@")) {
+        if (!mEmailField.getText().toString().contains("@")) {
             mEmailField.setError("Required");
             result = false;
         } else {
@@ -283,7 +293,7 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
                                             Log.d(TAG, "User account .");
                                             Toast.makeText(getActivity().getApplicationContext(),
                                                     "User was deleted successfully.", Toast.LENGTH_SHORT).show();
-                                            //Todo:delete tabs and drinks of this user from realtime DB
+                                            //Todo:delete tabs and drinks of this user from the firebase realtime DB
                                             if(mDatabase != null){
                                                 mDatabase.getRef().removeValue();
                                             }

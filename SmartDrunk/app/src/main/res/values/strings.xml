@@ -95,6 +95,6 @@
     <string name="share_facebook">heloo2</string>
     <string name="share_sms">heloo1</string>
     <string name="share_email_gmail">heloo</string>
-    <string name="volume_of_drinl_ml">Volume of drinl(ml)</string>
+    <string name="volume_of_drinl_ml">Volume of drink(ml)</string>
     <string name="volume_of_alcohol">Volume of alcohol(%)</string>
 </resources>

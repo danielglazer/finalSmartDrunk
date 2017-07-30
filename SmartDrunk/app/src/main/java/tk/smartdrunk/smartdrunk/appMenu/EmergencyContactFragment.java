@@ -51,7 +51,7 @@ public class EmergencyContactFragment extends android.support.v4.app.Fragment im
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
                 User user = dataSnapshot.getValue(User.class);
-                phoneNumber = user.emergencyContact;
+                phoneNumber = user.getEmergencyContact();
                 // ...
             }
 

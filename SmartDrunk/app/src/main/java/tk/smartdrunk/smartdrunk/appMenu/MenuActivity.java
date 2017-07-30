@@ -29,8 +29,8 @@ import tk.smartdrunk.smartdrunk.loginAndRegister.SignInActivity;
 public class MenuActivity extends android.support.v4.app.FragmentActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "MenuActivity";
 
+    private static final String TAG = "MenuActivity";
     private ProgressDialog mProgressDialog;
     private NavigationView navigationView;
     FragmentManager fragmentManager;
@@ -111,7 +111,7 @@ public class MenuActivity extends android.support.v4.app.FragmentActivity
         } else if (id == R.id.nav_statistics) {
             fragmentManager.beginTransaction().replace(R.id.content_frame,new StatisticFragment(),"statisticsFragment").commit();
         } else if (id == R.id.nav_Driver) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame,new StatisticFragment(),"driveFragment").commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame,new DriveFragment(),"driveFragment").commit();
         } else if (id == R.id.nav_settings) {
             fragmentManager.beginTransaction().replace(R.id.content_frame,new HomeFragment(),"settingsFragment").commit();
         } else if (id == R.id.nav_Hangover) {

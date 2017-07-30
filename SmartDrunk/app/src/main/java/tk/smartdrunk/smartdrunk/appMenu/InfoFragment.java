@@ -25,7 +25,7 @@ public class InfoFragment extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View view) {
                 Intent ContactByMail = new Intent(Intent.ACTION_SENDTO
-                        , Uri.fromParts("mailto", "danielglazer123@gmail.com,alon.dankner1@gmail.com", null));
+                        , Uri.fromParts("mailto", "danielglazer123@gmail.com", null));
                 ContactByMail.putExtra(Intent.EXTRA_SUBJECT, "I just love your Smart Drunk app...");
                 ContactByMail.putExtra(Intent.EXTRA_TEXT, "I really enjoy your app because : ...");
                 startActivity(Intent.createChooser(ContactByMail, "Send email..."));

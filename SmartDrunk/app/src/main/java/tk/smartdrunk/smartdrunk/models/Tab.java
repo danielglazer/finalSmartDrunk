@@ -15,23 +15,27 @@ import java.util.Map;
 // [START Tab_class]
 public class Tab {
 
-    //public String uid;  - redundant
     //public Map<String,DrinkOccasion> drinkOccasionMap;
     //public double satisfaction; ///between 0 to 5 stars
-    public String tabOpenDate;
-    public String tabCloseDate;
-    public boolean wasHangover;
-    public double maxBAC;
 
-    public Tab(){
+    private String tabOpenDate;
+    private String tabCloseDate; // simple date string or "Not Yet"
+    private String wasHangover; // can store the values: 'Yes', 'No' or 'Not Supplied'
+    private double maxBAC;
+
+    /*constructors*/
+    public Tab() {
+        // Default constructor required for calls to DataSnapshot.getValue(Tab.class)
     }
-    public Tab(String tabOpenDate, String tabCloseDate, boolean wasHangover, boolean isOpen,double maxBAC){
+
+    public Tab(String tabOpenDate, String tabCloseDate, String wasHangover, double maxBAC) {
         this.tabOpenDate = tabOpenDate;
         this.tabCloseDate = tabCloseDate;
         this.wasHangover = wasHangover;
         this.maxBAC = maxBAC;
     }
 
+    /*helpful method*/
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
@@ -41,5 +45,39 @@ public class Tab {
         result.put("maxBAC", maxBAC);
         return result;
     }
+
+    /*Getters and Setters*/
+    public String getTabOpenDate() {
+        return tabOpenDate;
+    }
+
+    public void setTabOpenDate(String tabOpenDate) {
+        this.tabOpenDate = tabOpenDate;
+    }
+
+    public String getTabCloseDate() {
+        return tabCloseDate;
+    }
+
+    public void setTabCloseDate(String tabCloseDate) {
+        this.tabCloseDate = tabCloseDate;
+    }
+
+    public double getMaxBAC() {
+        return maxBAC;
+    }
+
+    public void setMaxBAC(double maxBAC) {
+        this.maxBAC = maxBAC;
+    }
+
+    public String getWasHangover() {
+        return wasHangover;
+    }
+
+    public void setWasHangover(String wasHangover) {
+        this.wasHangover = wasHangover;
+    }
+
 }
 // [END Tab_class]
