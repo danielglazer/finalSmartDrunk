@@ -26,7 +26,7 @@ import tk.smartdrunk.smartdrunk.AddDrinkActivity;
 import tk.smartdrunk.smartdrunk.R;
 import tk.smartdrunk.smartdrunk.TabListAdapter;
 import tk.smartdrunk.smartdrunk.models.Tab;
-import tk.smartdrunk.smartdrunk.notificationsAndAlarm.ScheduleClient;
+import tk.smartdrunk.smartdrunk.notificationsAndAlarms.ScheduleClient;
 
 import static tk.smartdrunk.smartdrunk.models.User.getUid;
 
@@ -149,19 +149,13 @@ public class HomeFragment extends android.support.v4.app.Fragment implements Vie
     }
 
     private void notifyDemo(){
-        // Get the date from our datepicker
-        int day = 2;
-        int month = 8;
-        int year = 2017;
         // Create a new calendar set to the date chosen
         // we set the time to midnight (i.e. the first minute of that day)
-        Calendar c = Calendar.getInstance();
-//        c.set(year, month, day);
-//        c.set(Calendar.HOUR_OF_DAY, 15);
-//        c.set(Calendar.MINUTE, 35);
-//        c.set(Calendar.SECOND, 0);
+        Calendar cal = Calendar.getInstance();
         // Ask our service to set an alarm for that date, this activity talks to the client that talks to the service
-        scheduleClient.setAlarmForNotification(c);
+        cal.add(Calendar.SECOND,12);
+        scheduleClient.getmBoundService().setNotificationString("According to our estimation you are now legally qualify for driving!");
+        scheduleClient.setAlarmForNotification(cal);
     }
     @Override
     public void onStop() {

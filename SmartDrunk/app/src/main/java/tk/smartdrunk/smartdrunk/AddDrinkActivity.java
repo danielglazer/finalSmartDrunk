@@ -30,6 +30,7 @@ import static java.lang.Integer.parseInt;
 import static java.util.Calendar.DATE;
 import static java.util.Calendar.MONTH;
 import static java.util.Calendar.YEAR;
+import static tk.smartdrunk.smartdrunk.models.Drink.getSD;
 
 public class AddDrinkActivity extends BaseActivity implements View.OnClickListener {
 
@@ -94,8 +95,8 @@ public class AddDrinkActivity extends BaseActivity implements View.OnClickListen
         userDB.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(isFirstUser) {
-                    isFirstUser=false;
+                if (isFirstUser) {
+                    isFirstUser = false;
                     //get current user
                     user = dataSnapshot.getValue(User.class);
                 }
@@ -191,10 +192,7 @@ public class AddDrinkActivity extends BaseActivity implements View.OnClickListen
                 currentDate);
 
         // We need to recalculate the user BAC
-        double alcoholInML = drink.getDrinkVolume() * (drink.getAlcoholVolume() / 100) * drink.getDrinkNumber();
-        double ethanolDensity = 0.7893; // at 20 celsius
-        //SD is the number of standard drinks, that being 10 grams of ethanol each
-        double SD = (ethanolDensity * alcoholInML) / 10;
+        double SD = getSD(drink);
         double weight = user.getWeight();
         double bodyWater = getBodyWaterConstant();
         double newBAC = (0.806 * SD * 1.2) / (bodyWater * weight);
@@ -229,9 +227,9 @@ public class AddDrinkActivity extends BaseActivity implements View.OnClickListen
         tabDrinksDB.child(currentTabKey).push().setValue(drink);
 
         // does the user need to be warn ( is he/she 1 beer away from a hangover?)
-        double beerInML = 333 * 0.05; // 1/3 liter beer containing 5% alcohol
-        SD = ethanolDensity * beerInML / 10;
-        double beerAway = (0.806 * SD * 1.2) / (bodyWater * weight);
+        // 1/3 liter beer containing 5% alcohol
+        Drink beer = new Drink(333, 5, 1, currentDate); //the date is irrelevant in this case but needed for constructor
+        double beerAway = (0.806 * getSD(beer) * 1.2) / (bodyWater * weight);
 
         if (user.getConfidenceValue() > 0.6 &&
                 user.getBestSeparator() < (newBAC + beerAway)) {

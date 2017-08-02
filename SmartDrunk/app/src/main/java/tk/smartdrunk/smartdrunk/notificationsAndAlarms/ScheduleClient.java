@@ -1,4 +1,4 @@
-package tk.smartdrunk.smartdrunk.notificationsAndAlarm;
+package tk.smartdrunk.smartdrunk.notificationsAndAlarms;
 
 /**
  * Created by Daniel on 8/2/2017.
@@ -19,6 +19,10 @@ import java.util.Calendar;
  * @author paul.blundell
  */
 public class ScheduleClient {
+
+    public ScheduleService getmBoundService() {
+        return mBoundService;
+    }
 
     // The hook into our service
     private ScheduleService mBoundService;

@@ -18,12 +18,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import tk.smartdrunk.smartdrunk.R;
 import tk.smartdrunk.smartdrunk.loginAndRegister.SignInActivity;
+import tk.smartdrunk.smartdrunk.models.Tab;
+import tk.smartdrunk.smartdrunk.models.User;
+import tk.smartdrunk.smartdrunk.notificationsAndAlarms.ScheduleClient;
 
 public class MenuActivity extends android.support.v4.app.FragmentActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,7 +36,12 @@ public class MenuActivity extends android.support.v4.app.FragmentActivity
     private NavigationView navigationView;
     FragmentManager fragmentManager;
     private static FirebaseAuth mAuth;
-
+    private DatabaseReference usersDB, userTabsDB, tabDrinksDB;
+    private User user;
+    private ArrayList<Tab> tabs = new ArrayList<Tab>();
+    private ArrayList<String> tabStrings = new ArrayList<String>();
+    private ScheduleClient scheduleClient;
+    private boolean isFirst;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +59,8 @@ public class MenuActivity extends android.support.v4.app.FragmentActivity
         // set home as default fragment
         fragmentManager.beginTransaction().replace(R.id.content_frame, new HomeFragment(), "homeFragment").commit();
         navigationView.setCheckedItem(R.id.nav_home);
-
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override

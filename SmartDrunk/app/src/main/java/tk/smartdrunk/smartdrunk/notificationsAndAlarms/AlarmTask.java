@@ -1,4 +1,4 @@
-package tk.smartdrunk.smartdrunk.notificationsAndAlarm;
+package tk.smartdrunk.smartdrunk.notificationsAndAlarms;
 
 /**
  * Created by Daniel on 8/2/2017.
@@ -29,10 +29,13 @@ public class AlarmTask implements Runnable {
     // Your context to retrieve the alarm manager from
     private final Context context;
 
-    public AlarmTask(Context context, Calendar date) {
+    private String msg;
+
+    public AlarmTask(Context context, Calendar date, String msg) {
         this.context = context;
         this.am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         this.date = date;
+        this.msg = msg;
     }
 
     @Override
@@ -41,6 +44,7 @@ public class AlarmTask implements Runnable {
         // We don't start an activity as we just want to pop up a notification into the system bar not a full activity
         Intent intent = new Intent(context, NotifyService.class);
         intent.putExtra(NotifyService.INTENT_NOTIFY, true);
+        intent.putExtra("msg", msg);
         PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
 
         // Sets an alarm - note this alarm will be lost if the phone is turned off and on again

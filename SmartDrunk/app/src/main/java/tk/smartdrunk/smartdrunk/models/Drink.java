@@ -58,4 +58,14 @@ public class Drink {
         this.drinkDate = drinkDate;
     }
 
+    /**
+     * @param drink
+     * @return the number of SD in the input drink
+     */
+    public static double getSD(Drink drink) {
+        double alcoholInML = drink.getDrinkVolume() * (drink.getAlcoholVolume() / 100) * drink.getDrinkNumber();
+        double ethanolDensity = 0.7893; // at 20 celsius
+        //SD is the number of standard drinks, that being 10 grams of ethanol each
+        return (ethanolDensity * alcoholInML) / 10;
+    }
 }

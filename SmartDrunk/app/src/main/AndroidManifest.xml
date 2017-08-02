@@ -204,8 +204,9 @@
     <uses-permission android:name="android.permission.ACCESS_CONTENT_PROVIDERS_EXTERNALLY" />
     <uses-permission android:name="android.permission.UPDATE_LOCK" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <uses-sdk android:minSdkVersion="16" />
     <application
         android:allowBackup="true"
@@ -225,22 +226,19 @@
         </activity>
         <activity
             android:name=".loginAndRegister.SignInActivity"
-            android:launchMode="singleTop">
-        </activity>
+            android:launchMode="singleTop"></activity>
         <activity
             android:name=".loginAndRegister.SignUpActivity"
-            android:launchMode="singleTop">
-        </activity>
+            android:launchMode="singleTop"></activity>
         <activity
             android:name=".appMenu.MenuActivity"
             android:label="@string/title_activity_menu"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme">
-        </activity>
-        <activity android:name=".AddDrinkActivity">
-        </activity>
-        <service android:name=".notificationsAndAlarm.ScheduleService" />
-        <service android:name=".notificationsAndAlarm.NotifyService" />
+            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".AddDrinkActivity"></activity>
+
+        <service android:name=".notificationsAndAlarms.ScheduleService" />
+        <service android:name=".notificationsAndAlarms.NotifyService" />
     </application>
 
 </manifest>

@@ -23,21 +23,21 @@ public class DriveFragment extends android.support.v4.app.Fragment {
     private LinearLayout linearLayout1, linearLayout2;
     private Handler handler;
     private Runnable runnable;
-    
-    View my_view ;
+
+    View my_view;
+
     @SuppressLint("SimpleDateFormat")
     @Nullable
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        my_view=inflater.inflate(R.layout.drive_fragment, container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        my_view = inflater.inflate(R.layout.drive_fragment, container, false);
 
         linearLayout1 = (LinearLayout) my_view.findViewById(R.id.ll1);
-        linearLayout2 = (LinearLayout)  my_view.findViewById(R.id.ll2);
-        tvDay = (TextView)  my_view.findViewById(R.id.txtTimerDay);
-        tvHour = (TextView)  my_view.findViewById(R.id.txtTimerHour);
-        tvMinute = (TextView)  my_view.findViewById(R.id.txtTimerMinute);
-        tvSecond = (TextView)  my_view.findViewById(R.id.txtTimerSecond);
-        tvEvent = (TextView)  my_view.findViewById(R.id.tvevent);
+        linearLayout2 = (LinearLayout) my_view.findViewById(R.id.ll2);
+        tvDay = (TextView) my_view.findViewById(R.id.txtTimerDay);
+        tvHour = (TextView) my_view.findViewById(R.id.txtTimerHour);
+        tvMinute = (TextView) my_view.findViewById(R.id.txtTimerMinute);
+        tvSecond = (TextView) my_view.findViewById(R.id.txtTimerSecond);
+        tvEvent = (TextView) my_view.findViewById(R.id.tvevent);
 
 
         return my_view;
@@ -46,9 +46,8 @@ public class DriveFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //countDownStart();
+        countDownStart();
     }
-
 
 
     // //////////////COUNT DOWN START/////////////////////////
@@ -62,7 +61,7 @@ public class DriveFragment extends android.support.v4.app.Fragment {
                     SimpleDateFormat dateFormat = new SimpleDateFormat(
                             "yyyy-MM-dd");
                     // Here Set your Event Date
-                    Date eventDate = dateFormat.parse("2017-12-30");
+                    Date eventDate = dateFormat.parse("2017-8-3");
                     Date currentDate = new Date();
                     if (!currentDate.after(eventDate)) {
                         long diff = eventDate.getTime()
@@ -83,7 +82,7 @@ public class DriveFragment extends android.support.v4.app.Fragment {
                         linearLayout2.setVisibility(View.GONE);
                         tvEvent.setText("Android Event Start");
                         handler.removeCallbacks(runnable);
-                        // handler.removeMessages(0);
+                        //handler.removeMessages(0);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

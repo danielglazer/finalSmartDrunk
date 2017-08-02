@@ -1,4 +1,4 @@
-package tk.smartdrunk.smartdrunk.notificationsAndAlarm;
+package tk.smartdrunk.smartdrunk.notificationsAndAlarms;
 
 /**
  * Created by Daniel on 8/2/2017.
@@ -14,6 +14,11 @@ import java.util.Calendar;
 
 public class ScheduleService extends Service {
 
+    public void setNotificationString(String notificationString) {
+        this.notificationString = notificationString;
+    }
+
+    private String notificationString;
     /**
      * Class for clients to access
      */
@@ -45,6 +50,6 @@ public class ScheduleService extends Service {
     public void setAlarm(Calendar c) {
         // This starts a new thread to set the alarm
         // You want to push off your tasks onto a new thread to free up the UI to carry on responding
-        new AlarmTask(this, c).run();
+        new AlarmTask(this, c,notificationString).run();
     }
 }
