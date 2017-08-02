@@ -43,15 +43,15 @@ public class AddDrinkActivity extends BaseActivity implements View.OnClickListen
     private String tabCloseDate;
     private String tabOpenDate;
     private Tab currentTab = null;
-    private boolean isFirst = true;
-
-    //private boolean isFirst = true;
+    private boolean isFirstUser;
+    private boolean isFirstTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_drink);
-
+        isFirstTab = true;
+        isFirstUser = true;
         userTabsDB = FirebaseDatabase.getInstance().getReference().child("user-tabs").child(getUid());
         tabDrinksDB = FirebaseDatabase.getInstance().getReference().child("tab-drinks");
         userDB = FirebaseDatabase.getInstance().getReference().child("users").child(getUid());
@@ -94,8 +94,11 @@ public class AddDrinkActivity extends BaseActivity implements View.OnClickListen
         userDB.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //get current user
-                user = dataSnapshot.getValue(User.class);
+                if(isFirstUser) {
+                    isFirstUser=false;
+                    //get current user
+                    user = dataSnapshot.getValue(User.class);
+                }
             }
 
             @Override
@@ -108,10 +111,11 @@ public class AddDrinkActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //TODO: can be done by checking the last tab added
-                if (isFirst == false) {
+                if (isFirstTab == false) {
+                    //when adding a tab we don't want to go further
                     return;
                 }
-                isFirst = false;
+                isFirstTab = false;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Tab tab = ds.getValue(Tab.class);
                     // only 1 tab can be open at a time
@@ -176,7 +180,7 @@ public class AddDrinkActivity extends BaseActivity implements View.OnClickListen
         double MR = user.getGender().equals("female") ? (0.017 * 1.1) : 0.017;
 
         double lastBAC = user.getLastBAC();
-        double beforeNewBAC = (lastBAC - (DP * MR)) * 10;
+        double beforeNewBAC = (lastBAC - (DP * MR));
         // can't be lower than normal alcohol found in the blood though
         beforeNewBAC = beforeNewBAC < 0.00003 ? 0.00003 : beforeNewBAC;
 
@@ -276,15 +280,19 @@ public class AddDrinkActivity extends BaseActivity implements View.OnClickListen
                 manBodyWaterConstant = 0.51;
                 womanBodyWaterConstant = 0.46;
                 break;
+            case 7:
+                manBodyWaterConstant = 0.51;
+                womanBodyWaterConstant = 0.46;
+                break;
             default:
                 // invalid water constant since the age is invalid
                 return -1;
         }
-        if (gender == "Other") {
+        if (gender.equals("Other")) {
             bodyWaterConstant = (manBodyWaterConstant + womanBodyWaterConstant) / 2.0;
         } else {
             bodyWaterConstant =
-                    (gender == "Male") ? manBodyWaterConstant : womanBodyWaterConstant;
+                    (gender.equals("Male")) ? manBodyWaterConstant : womanBodyWaterConstant;
         }
         return bodyWaterConstant;
     }
@@ -303,8 +311,10 @@ public class AddDrinkActivity extends BaseActivity implements View.OnClickListen
         int ageGroupNumber = getAgeGroupNumber(age);
         double bodyWaterConstant = waterConst(ageGroupNumber, gender);
 
+
         // creating a linear connection between age and body weight
         // if possible(for people between 10 to 60 years old)
+        //linear interpolation
         if (ageGroupNumber != 7 && ageGroupNumber > 1) {
             double ratio = (ageGroupNumber * 10 - age) / 10.0;
             bodyWaterConstant =
@@ -344,7 +354,7 @@ public class AddDrinkActivity extends BaseActivity implements View.OnClickListen
      * @param birthDate the user date of birth
      * @return the user age
      */
-    public int getAge(Calendar birthDate) {
+    public static int getAge(Calendar birthDate) {
         return getDiffYears(birthDate, getCalendar(new Date()));
     }
 
@@ -353,7 +363,7 @@ public class AddDrinkActivity extends BaseActivity implements View.OnClickListen
      * @param last  second date
      * @return the difference in years between the two
      */
-    public int getDiffYears(Calendar first, Calendar last) {
+    public static int getDiffYears(Calendar first, Calendar last) {
         Calendar a = first;
         Calendar b = last;
         int diff = b.get(YEAR) - a.get(YEAR);
@@ -368,19 +378,10 @@ public class AddDrinkActivity extends BaseActivity implements View.OnClickListen
      * @param date a date
      * @return convert this date to Calendar
      */
-    public Calendar getCalendar(Date date) {
+    public static Calendar getCalendar(Date date) {
         Calendar cal = Calendar.getInstance(Locale.US);
         cal.setTime(date);
         return cal;
-    }
-
-    /**
-     * @param digitNumber the number of digits after the dot to round to
-     * @param number      a number
-     * @return the rounded number
-     */
-    public double roundDecimal(int digitNumber, double number) {
-        return Math.floor(number * (10 ^ digitNumber)) / (10 ^ digitNumber);
     }
 
     /**
@@ -420,41 +421,6 @@ public class AddDrinkActivity extends BaseActivity implements View.OnClickListen
             drinkNumber.setError(null);
         }
         return result;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //TODO: destroy watchers
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        if (isFirst == false){
-//            Date newDate = new Date();
-//            String newDateStr = newDate.toString();
-//            userDB.child("lastBACDate").setValue(newDateStr);
-//            Log.d(TAG, "onResume: " + user);
-//            Date lastDate = new Date(user.lastUpdatedDate);
-//
-//            long duration = newDate.getTime() - lastDate.getTime();
-//
-//            double DP = duration / (1000 * 60 * 60); // difference in hours
-//
-//            double MR = user.gender == "female" ? (0.17 * 1.1) : 0.17;
-//            //Another gender based difference is in the elimination of alcohol. Although not explained,
-//            // studies appear to show that women eliminate alcohol from their bodies at a rate 10% greater than that of men.
-//
-//            double newBAC = (user.lastBAC - DP * MR) * 10;
-//            userDB.child("lastBAC").setValue(newBAC);
-//    }
-        //isFirst = false;
     }
 
 }

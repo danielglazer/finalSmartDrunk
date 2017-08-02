@@ -13,8 +13,6 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,11 +20,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import tk.smartdrunk.smartdrunk.AddDrinkActivity;
 import tk.smartdrunk.smartdrunk.R;
 import tk.smartdrunk.smartdrunk.TabListAdapter;
 import tk.smartdrunk.smartdrunk.models.Tab;
+import tk.smartdrunk.smartdrunk.notificationsAndAlarm.ScheduleClient;
+
+import static tk.smartdrunk.smartdrunk.models.User.getUid;
 
 /**
  * Created by Daniel on 24/11/2016.
@@ -35,51 +37,46 @@ import tk.smartdrunk.smartdrunk.models.Tab;
 public class HomeFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
 
     private static final String TAG = "HomeFragment";
-
     private DatabaseReference userTabsDB;
-    private DatabaseReference mDatabase;
     private SwipeMenuListView list;
     private ArrayList<Tab> tabs = new ArrayList<Tab>();
+    private ArrayList<String> tabStrings = new ArrayList<String>();
+    private boolean isFirst;
+    private ScheduleClient scheduleClient;
     View my_view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         my_view = inflater.inflate(R.layout.home_layout, container, false);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase = mDatabase.child("Tabs");
         userTabsDB = FirebaseDatabase.getInstance().getReference().child("user-tabs").child(getUid());
+        isFirst = true;
         userTabsDB.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //TODO: can be done by checking the last tab added
-                /*if (isFirst == false) {
-                    return;
+                //TODO: sort the list by date (last date first)
+                if(isFirst){
+                    tabs.clear();
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        Tab tab = ds.getValue(Tab.class);
+                        tabs.add(tab);
+                        tabStrings.add(ds.getKey());
+                    }
+                    TabListAdapter adapter = new TabListAdapter(getActivity(), R.layout.tab, tabs);
+                    list.setAdapter(adapter);
                 }
-                isFirst = false;*/
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Tab tab = ds.getValue(Tab.class);
-                    tabs.add(tab);
-                    // only 1 tab can be open at a time
-//                    if (tab.getTabCloseDate().equals("Not Yet")) {
-//                        currentTab = tab;
-//                        currentTabKey = ds.getKey();
-//                        return;
-//                    }
-                }
-                // no tabs open so new one needed
-                // currentTabKey = null
-                TabListAdapter adapter = new TabListAdapter(getActivity(), R.layout.tab, tabs);
-                list.setAdapter(adapter);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
+        // Create a new service client and bind our activity to this service
+        scheduleClient = new  ScheduleClient(getContext());
+        scheduleClient.doBindService();
+        //set on click listeners
         my_view.findViewById(R.id.addDrinkFab).setOnClickListener(this);
-
+        my_view.findViewById(R.id.button2).setOnClickListener(this);
         list = (SwipeMenuListView) my_view.findViewById(R.id.listView);
 
         TabListAdapter adapter = new TabListAdapter(getActivity(), R.layout.tab, tabs);
@@ -128,8 +125,8 @@ public class HomeFragment extends android.support.v4.app.Fragment implements Vie
             }
         });
 
-        // Right
-        list.setSwipeDirection(SwipeMenuListView.DIRECTION_RIGHT);
+        // Left
+        list.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
         return my_view;
     }
 
@@ -138,8 +135,8 @@ public class HomeFragment extends android.support.v4.app.Fragment implements Vie
         int i = v.getId();
         if (i == R.id.addDrinkFab) {
             addDrink();
-        } else if (i == R.id.addDrinkFab) {
-            viewTab();
+        } else if(i == R.id.button2) {
+           notifyDemo();
         }
     }
 
@@ -150,12 +147,28 @@ public class HomeFragment extends android.support.v4.app.Fragment implements Vie
     private void viewTab() {
         return;
     }
-    public String getUid() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            return null;
-        } else {
-            return user.getUid();
-        }
+
+    private void notifyDemo(){
+        // Get the date from our datepicker
+        int day = 2;
+        int month = 8;
+        int year = 2017;
+        // Create a new calendar set to the date chosen
+        // we set the time to midnight (i.e. the first minute of that day)
+        Calendar c = Calendar.getInstance();
+//        c.set(year, month, day);
+//        c.set(Calendar.HOUR_OF_DAY, 15);
+//        c.set(Calendar.MINUTE, 35);
+//        c.set(Calendar.SECOND, 0);
+        // Ask our service to set an alarm for that date, this activity talks to the client that talks to the service
+        scheduleClient.setAlarmForNotification(c);
+    }
+    @Override
+    public void onStop() {
+        // When our activity is stopped ensure we also stop the connection to the service
+        // this stops us leaking our activity into the system *bad*
+        if(scheduleClient != null)
+            scheduleClient.doUnbindService();
+        super.onStop();
     }
 }

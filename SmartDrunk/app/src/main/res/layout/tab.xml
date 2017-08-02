@@ -22,7 +22,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Open Date: " />
+                android:text="Open Date: "
+                android:textColor="@color/colorPrimaryDark2" />
 
             <TextView
                 android:id="@+id/closeDate"
@@ -30,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="TextView"
+                android:textColor="@color/colorPrimaryDark2"
                 tools:text="Close Date :" />
 
             <TextView
@@ -38,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="TextView"
+                android:textColor="@color/colorPrimaryDark2"
                 tools:text="Max BAC:" />
 
         </LinearLayout>

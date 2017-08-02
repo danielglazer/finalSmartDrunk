@@ -1,5 +1,9 @@
 package tk.smartdrunk.smartdrunk.models;
 
+import android.support.annotation.Nullable;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -21,9 +25,7 @@ public class User {
 
     /* Virtual user parameters */
     private String email;
-    //    public boolean isNew;
     private String emergencyContact;
-//    public String country;
 
     /* Physical user parameters */
     private String birthDate;
@@ -35,7 +37,8 @@ public class User {
     /* Additional parameters*/
     private double bestSeparator;
     private double confidenceValue;
-    private String lastUpdatedDate;
+    private String lastUpdatedDate; // last time the BAC was changed
+    private String lastUpdatedSeparatorDate; // last time the LDA algorithm ran
 
     /*Useful facts*/
 
@@ -72,6 +75,7 @@ public class User {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
         this.lastUpdatedDate = sdf.format(cal.getTime());
+        this.lastUpdatedSeparatorDate = lastUpdatedDate;
         this.bestSeparator = -1;
         this.confidenceValue = -1;
     }
@@ -90,6 +94,7 @@ public class User {
         result.put("lastUpdatedDate", lastUpdatedDate);
         result.put("bestSeparator", bestSeparator);
         result.put("confidenceValue", confidenceValue);
+        result.put("lastUpdatedSeparatorDate", lastUpdatedSeparatorDate);
         return result;
     }
 
@@ -174,5 +179,27 @@ public class User {
         this.bestSeparator = bestSeparator;
     }
 
+    public String getLastUpdatedSeparatorDate() {
+        return lastUpdatedSeparatorDate;
+    }
+
+    public void setLastUpdatedSeparatorDate(String lastUpdatedSeparatorDate) {
+        this.lastUpdatedSeparatorDate = lastUpdatedSeparatorDate;
+    }
+
+    /**
+     * class related method.
+     * can be used outside of class and without a User object(mainly for code reuse purposes).
+     * @return a String that represent the user unique hashed string created in Firebase.
+     */
+    @Nullable
+    public static String getUid() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            return null;
+        } else {
+            return user.getUid();
+        }
+    }
 }
 // [END user_class]

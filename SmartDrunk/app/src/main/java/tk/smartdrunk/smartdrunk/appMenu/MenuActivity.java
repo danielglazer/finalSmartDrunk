@@ -1,6 +1,5 @@
 package tk.smartdrunk.smartdrunk.appMenu;
 
-import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.LabeledIntent;
@@ -29,30 +28,27 @@ import tk.smartdrunk.smartdrunk.loginAndRegister.SignInActivity;
 public class MenuActivity extends android.support.v4.app.FragmentActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
     private static final String TAG = "MenuActivity";
-    private ProgressDialog mProgressDialog;
     private NavigationView navigationView;
     FragmentManager fragmentManager;
-    private FirebaseAuth mAuth;
+    private static FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //contextOfApplication = getApplicationContext();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        mAuth =  FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         fragmentManager = getSupportFragmentManager();
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         // set home as default fragment
-        fragmentManager.beginTransaction().replace(R.id.content_frame,new HomeFragment(),"homeFragment").commit();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, new HomeFragment(), "homeFragment").commit();
         navigationView.setCheckedItem(R.id.nav_home);
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -60,13 +56,13 @@ public class MenuActivity extends android.support.v4.app.FragmentActivity
 
     @Override
     public void onBackPressed() {
+        //always go back to homeFragment
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if(getSupportFragmentManager().findFragmentByTag("homeFragment") == null){
-                fragmentManager.beginTransaction().replace(R.id.content_frame,new HomeFragment(),"homeFragment").commit();
+            if (getSupportFragmentManager().findFragmentByTag("homeFragment") == null) {
+                fragmentManager.beginTransaction().replace(R.id.content_frame, new HomeFragment(), "homeFragment").commit();
                 drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 navigationView.setCheckedItem(R.id.nav_home);
             } else {
@@ -105,21 +101,21 @@ public class MenuActivity extends android.support.v4.app.FragmentActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame,new HomeFragment(),"homeFragment").commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new HomeFragment(), "homeFragment").commit();
         } else if (id == R.id.nav_profile) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame,new ProfileFragment(),"profileFragment").commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new ProfileFragment(), "profileFragment").commit();
         } else if (id == R.id.nav_statistics) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame,new StatisticFragment(),"statisticsFragment").commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new StatisticFragment(), "statisticsFragment").commit();
         } else if (id == R.id.nav_Driver) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame,new DriveFragment(),"driveFragment").commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new DriveFragment(), "driveFragment").commit();
         } else if (id == R.id.nav_settings) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame,new HomeFragment(),"settingsFragment").commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new HomeFragment(), "settingsFragment").commit();
         } else if (id == R.id.nav_Hangover) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame,new HomeFragment(),"hangoverFragment").commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new HomeFragment(), "hangoverFragment").commit();
         } else if (id == R.id.nav_Info) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new InfoFragment(),"infoFragment").commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new InfoFragment(), "infoFragment").commit();
         } else if (id == R.id.nav_Emergency_Contact) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame,new EmergencyContactFragment(),"emergencyFragment").commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new EmergencyContactFragment(), "emergencyFragment").commit();
         } else if (id == R.id.nav_signOut) {
             mAuth.signOut();
             // Go to SignInActivity
@@ -150,34 +146,33 @@ public class MenuActivity extends android.support.v4.app.FragmentActivity
                 // Extract the label, append it, and repackage it in a LabeledIntent
                 ResolveInfo ri = resInfo.get(i);
                 String packageName = ri.activityInfo.packageName;
-                if(packageName.contains("android.email")) {
+                if (packageName.contains("android.email")) {
                     emailIntent.setPackage(packageName);
-                } else if(packageName.contains("twitter") || packageName.contains("facebook") || packageName.contains("mms") || packageName.contains("android.gm")) {
+                } else if (packageName.contains("twitter") || packageName.contains("facebook") ||
+                        packageName.contains("mms")) {
                     Intent intent = new Intent();
                     intent.setComponent(new ComponentName(packageName, ri.activityInfo.name));
                     intent.setAction(Intent.ACTION_SEND);
                     intent.setType("text/plain");
-                    if(packageName.contains("twitter")) {
+                    if (packageName.contains("twitter")) {
                         intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.share_twitter));
-                    } else if(packageName.contains("facebook")) {
-                        // Warning: Facebook IGNORES our text. They say "These fields are intended for users to express themselves.                         Pre-filling these fields erodes the authenticity of the user voice."
-                        // One workaround is to use the Facebook SDK to post, but that doesn't allow the user to choose how they                            want to share. We can also make a custom landing page, and the link
+                    } else if (packageName.contains("facebook")) {
+                        // Warning: Facebook IGNORES our text. They say "These fields are intended for users to express themselves.
+                        // Pre-filling these fields erodes the authenticity of the user voice.
+                        // One workaround is to use the Facebook SDK to post, but that doesn't allow the user to choose how they
+                        // want to share. We can also make a custom landing page, and the link
                         // will show the <meta content ="..."> text from that page with our link in Facebook.
                         intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.share_facebook));
-                    } else if(packageName.contains("sms")) {
+                    } else if (packageName.contains("sms")) {
                         intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.share_sms));
-                    } //else if(packageName.contains("android.gm")) { // If Gmail shows up twice, try removing this else-if clause and                     the reference to "android.gm" above
-//                        intent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(resources.getString(R.string.share_email_gmail)));
-//                        intent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.share_email_subject));
-//                        intent.setType("message/rfc822");
-//                    }
+                    }
 
                     intentList.add(new LabeledIntent(intent, packageName, ri.loadLabel(pm), ri.icon));
                 }
             }
 
             // convert intentList to array
-            LabeledIntent[] extraIntents = intentList.toArray( new LabeledIntent[ intentList.size() ]);
+            LabeledIntent[] extraIntents = intentList.toArray(new LabeledIntent[intentList.size()]);
 
             openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
             startActivity(openInChooser);
@@ -187,9 +182,4 @@ public class MenuActivity extends android.support.v4.app.FragmentActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-//    public static Context contextOfApplication;
-//    public static Context getContextOfApplication()
-//    {
-//        return contextOfApplication;
-//    }
 }

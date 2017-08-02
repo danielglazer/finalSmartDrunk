@@ -59,11 +59,12 @@ public class BAC_LDA {
             hungoverWithHigherBAC = true;
             separator = (minHungover + maxNotHungover) / 2;
         }
-      /* TODO: check if this 'if' section is needed (we can assume that the user only                                                               get hungover from high BAC and not the other way around */
-        if (maxHungover < minNotHungover) {
+        //we can assume that the user only get hungover from high BAC and not FROM low BAC
+        // and this is why we don't need the following lines :
+        /*if (maxHungover < minNotHungover) {
             hungoverWithHigherBAC = false;
             separator = (minNotHungover + maxHungover) / 2;
-        }
+        }*/
         Object[] result;
         if (separator != 0) {
             result = new Object[]{true, separator, hungoverWithHigherBAC};
@@ -94,6 +95,7 @@ public class BAC_LDA {
         if (getConfidenceValue(tabs, bestSeparator + 0.0000001) > maxConfidenceValue) {
             //move to the right
             // find minimum that is larger then bestSeparator than find avg
+            // to maximize distance from separator
             double min = 1;
             double currentBAC;
             for (Tab tab : tabs) {
@@ -107,6 +109,7 @@ public class BAC_LDA {
         if (getConfidenceValue(tabs, bestSeparator - 0.0000001) > maxConfidenceValue) {
             //move to the left
             // find maximum that is smaller then bestSeparator than find avg
+            // to maximize distance from separator
             double max = -1;
             double currentBAC;
             for (Tab tab : tabs) {
@@ -122,6 +125,11 @@ public class BAC_LDA {
         return result;
     }
 
+    /**
+     * general case of classification
+     * @param tabs
+     * @return 2 doubles the first is the separator and the second is the confidence
+     */
     public double[] classify(ArrayList<Tab> tabs) {
         // try to optimally classify
         double[] result = new double[2];
@@ -130,7 +138,8 @@ public class BAC_LDA {
             result[0] = (double) optimalResult[1];
             // since this is optimal the result confidence always be 1
             result[1] = 1.0;
-        } else {                                                   // if not do it not optimally
+        } else {
+            // if not do it not optimally
             result = exhaustiveClassification(tabs);
         }
         return result;
@@ -158,6 +167,12 @@ public class BAC_LDA {
         return result;
     }
 
+    /**
+     *
+     * @param value - number
+     * @param places - int (number of digits to round to)
+     * @return
+     */
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 

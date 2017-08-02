@@ -31,12 +31,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 import tk.smartdrunk.smartdrunk.R;
 import tk.smartdrunk.smartdrunk.loginAndRegister.SignInActivity;
 import tk.smartdrunk.smartdrunk.models.User;
+
+import static java.lang.Integer.parseInt;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
+import static tk.smartdrunk.smartdrunk.AddDrinkActivity.getAge;
+import static tk.smartdrunk.smartdrunk.models.User.getUid;
 
 public class ProfileFragment extends android.support.v4.app.Fragment implements View.OnClickListener {
 
@@ -46,13 +54,15 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
     // Profile fields
     private User user;
     private EditText mEmailField, mPasswordField, mWeightField;
-    private TextView genderTextView, mBirthDateField, contactNumber;
+    private TextView genderTextView, mAgeField, contactNumber;
     private QuickContactBadge emergencyContact;
     private Switch newDriverSwitch;
-    private Button update,delete;
-    private DatabaseReference mDatabase;
+    private Button update, delete;
+    private DatabaseReference userDB, userTabsDB, tabDrinksDB;
     private FirebaseAuth mAuth;
-    private boolean isFirstDataChange;
+    private ArrayList<String> tabsToDelete = new ArrayList<String>();
+    private boolean isFirstUserChange = true;
+    private boolean isFirstTabChange = true;
     View my_view;
 
 
@@ -60,29 +70,45 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         my_view = inflater.inflate(R.layout.activity_profile, container, false);
-        isFirstDataChange = true;
         mAuth = FirebaseAuth.getInstance();
+        isFirstUserChange = true;
+        isFirstTabChange = true;
         mEmailField = (EditText) my_view.findViewById(R.id.field_email);
         mPasswordField = (EditText) my_view.findViewById(R.id.field_password);
         mWeightField = (EditText) my_view.findViewById(R.id.field_weight);
         genderTextView = (TextView) my_view.findViewById(R.id.genderTextView);
-        mBirthDateField = (TextView) my_view.findViewById(R.id.birthDateTextView);
+        mAgeField = (TextView) my_view.findViewById(R.id.birthDateTextView);
         emergencyContact = (QuickContactBadge) my_view.findViewById(R.id.emergencyContact);
         newDriverSwitch = (Switch) my_view.findViewById(R.id.newDriverSwitch);
         contactNumber = (TextView) my_view.findViewById(R.id.contact_number);
         update = (Button) my_view.findViewById(R.id.updateProfileButton);
         delete = (Button) my_view.findViewById(R.id.deleteUserButton);
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("users").child(getUid());
+        //if not logged in
+        if (getUid() == null) {
+            mAuth.signOut();
+            // Go to SignInActivity
+            Intent intent = new Intent(getActivity(), SignInActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
+        userDB = FirebaseDatabase.getInstance().getReference().child("users").child(getUid());
+        userTabsDB = FirebaseDatabase.getInstance().getReference().child("user-tabs").child(getUid());
+        tabDrinksDB = FirebaseDatabase.getInstance().getReference().child("tab-drinks");
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-                if (user!=null && isFirstDataChange) {
-                    isFirstDataChange = false;
+                if (user != null && isFirstUserChange) {
+                    isFirstUserChange = false;
                     mEmailField.setText(user.getEmail());
                     mWeightField.setText(String.valueOf(user.getWeight()));
-                    genderTextView.setText("BirthDate:   " + user.getGender());
-                    mBirthDateField.setText("Gender:   " + user.getBirthDate());
+                    String[] birth = user.getBirthDate().split("\\.");
+                    Calendar date = Calendar.getInstance();
+                    date.set(YEAR, parseInt(birth[2]));
+                    date.set(MONTH, parseInt(birth[0]));
+                    date.set(Calendar.DAY_OF_MONTH, parseInt(birth[1]));
+                    genderTextView.setText("Gender:   " + user.getGender());
+                    mAgeField.setText("Age:   " + getAge(date));
                     newDriverSwitch.setChecked(user.isNewDriver());
                     contactNumber.setText(user.getEmergencyContact());
                 }
@@ -92,7 +118,24 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        mDatabase.getRef().addValueEventListener(userListener);
+        ValueEventListener tabListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (isFirstTabChange) {
+                    isFirstTabChange = false;
+                    tabsToDelete.clear();
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        tabsToDelete.add(ds.getKey());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        userDB.getRef().addValueEventListener(userListener);
+        userTabsDB.getRef().addValueEventListener(tabListener);
         emergencyContact.setImageToDefault();
         update.setOnClickListener(this);
         emergencyContact.setOnClickListener(this);
@@ -100,14 +143,6 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
         return my_view;
     }
 
-    public String getUid() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            return null;
-        } else {
-            return user.getUid();
-        }
-    }
 
     @Override
     public void onClick(View v) {
@@ -132,7 +167,7 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
 
 
         FirebaseUser firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
-        if(!user.getEmail().equals(mEmailField.getText().toString())) {
+        if (!user.getEmail().equals(mEmailField.getText().toString())) {
             firebaseuser.updateEmail(mEmailField.getText().toString())
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -157,8 +192,7 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
                                 Log.d(TAG, "User password updated.");
                                 Toast.makeText(getActivity().getApplicationContext(),
                                         "User password updated.", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
+                            } else {
                                 Log.d(TAG, "User password update failed.");
                                 Toast.makeText(getActivity().getApplicationContext(),
                                         "Password update failed.", Toast.LENGTH_SHORT).show();
@@ -178,7 +212,7 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
         Map<String, Object> userValues = user.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/" + getUid(), userValues);
-        mDatabase.getParent().updateChildren(childUpdates);
+        userDB.getParent().updateChildren(childUpdates);
     }
 
     @Override
@@ -282,9 +316,9 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         //Yes button clicked
-                        FirebaseUser firebaseuser = FirebaseAuth.getInstance().getCurrentUser();
+                        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                        firebaseuser.delete()
+                        firebaseUser.delete()
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
@@ -294,11 +328,19 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
                                             Toast.makeText(getActivity().getApplicationContext(),
                                                     "User was deleted successfully.", Toast.LENGTH_SHORT).show();
                                             //Todo:delete tabs and drinks of this user from the firebase realtime DB
-                                            if(mDatabase != null){
-                                                mDatabase.getRef().removeValue();
+                                            for (String temp : tabsToDelete) {
+                                                if (tabDrinksDB.child(temp) != null) {
+                                                    tabDrinksDB.child(temp).getRef().removeValue();
+                                                }
+                                            }
+                                            if (userTabsDB != null) {
+                                                userTabsDB.getRef().removeValue();
+                                            }
+                                            if (userDB != null) {
+                                                userDB.getRef().removeValue();
                                             }
                                             // Go to SignInActivity
-                                            Intent intent = new Intent(getActivity(), SignInActivity    .class);
+                                            Intent intent = new Intent(getActivity(), SignInActivity.class);
                                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                             startActivity(intent);
                                             getActivity().finish();
@@ -316,7 +358,6 @@ public class ProfileFragment extends android.support.v4.app.Fragment implements 
             }
         };
         AlertDialog.Builder builder = new AlertDialog.Builder(getView().getContext());
-        //AlertDialog.Builder builder = new AlertDialog.Builder(getActivity().getApplicationContext());
         builder.setMessage("Are you sure you want to delete this user?").setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
 

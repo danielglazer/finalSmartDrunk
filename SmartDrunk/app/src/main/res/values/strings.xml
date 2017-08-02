@@ -39,15 +39,15 @@
     <!-- Strings related to Info -->
     <string name="link_to_site">https://www.vecteezy.com</string>
     <string name="credit_to_site">Logo Vector Illustration by Vecteezy(autor freevector)</string>
-    <string name="alon_dankner_daniel_glazer"><![CDATA[  Alon Dankner & Daniel Glazer]]></string>
+    <string name="alon_dankner_daniel_glazer"><![CDATA[Daniel Glazer & Alon Dankner ]]></string>
     <string name="developers">Developers:</string>
     <string name="credits">Credits:</string>
     <string name="warnings">Warnings!</string>
     <string name="smartdrunk_application_info">SmartDrunk Application Info</string>
     <string name="guidance_ibrahim_jubran">Guidance: Ibrahim Jubran</string>
     <string name="contact"><a href="mailto:someone@example.com?Subject=Hello%20again" target="_top">Contact Us!</a></string>
-    <string name="warning">Please remember that our appliction can only estimate your BAC and that you should not drive after drinking any amount of alcohol!!!</string>
-    <string name="info">This application was developed as a part of final project in our BSc degree in Computer Science. and its objective is to make drivers more aware to thier driving habbits.</string>
+    <string name="warning">Please remember that our application can only estimate your BAC and that you should not drive after drinking any amount of alcohol!!!</string>
+    <string name="info">This application was developed as a part of final project in our BSc degree in Computer Science. and its objective is to make drivers more aware to their driving habits.</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="contact_us">Contact Us!</string>
 
@@ -73,7 +73,7 @@
     <string name="emergency_options">Emergency Options</string>
     <string name="emergency_call">Emergency Call</string>
     <string name="emergency_text">Emergency Text</string>
-    <string name="birth_date">Birth Date:</string>
+    <string name="birth_date">Age:</string>
     <string name="gender_word">gender</string>
     <string name="update_profile">Update profile</string>
     <string name="reset_my_password_please">Reset my password please!</string>

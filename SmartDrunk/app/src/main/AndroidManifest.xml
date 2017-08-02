@@ -206,7 +206,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
+    <uses-sdk android:minSdkVersion="16" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -239,6 +239,8 @@
         </activity>
         <activity android:name=".AddDrinkActivity">
         </activity>
+        <service android:name=".notificationsAndAlarm.ScheduleService" />
+        <service android:name=".notificationsAndAlarm.NotifyService" />
     </application>
 
 </manifest>
