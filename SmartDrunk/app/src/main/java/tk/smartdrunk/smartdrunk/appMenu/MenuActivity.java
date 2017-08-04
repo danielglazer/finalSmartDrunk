@@ -18,9 +18,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import tk.smartdrunk.smartdrunk.R;
@@ -29,19 +34,33 @@ import tk.smartdrunk.smartdrunk.models.Tab;
 import tk.smartdrunk.smartdrunk.models.User;
 import tk.smartdrunk.smartdrunk.notificationsAndAlarms.ScheduleClient;
 
+import static tk.smartdrunk.smartdrunk.models.User.getUid;
+
 public class MenuActivity extends android.support.v4.app.FragmentActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "MenuActivity";
+
+    //view related
     private NavigationView navigationView;
     FragmentManager fragmentManager;
-    private static FirebaseAuth mAuth;
-    private DatabaseReference usersDB, userTabsDB, tabDrinksDB;
-    private User user;
-    private ArrayList<Tab> tabs = new ArrayList<Tab>();
-    private ArrayList<String> tabStrings = new ArrayList<String>();
-    private ScheduleClient scheduleClient;
-    private boolean isFirst;
+
+    // auth related
+    static FirebaseAuth mAuth;
+
+    //real time DB related
+    DatabaseReference usersDB, userTabsDB, tabDrinksDB;
+    static User user;
+    ArrayList<Tab> tabsList = new ArrayList<Tab>();
+    ArrayList<String> tabStrings = new ArrayList<String>();
+//    static Map<Drink,String> tabKeyToDrink =new HashMap<>();
+    //notification "handler"
+    static ScheduleClient scheduleClient;
+
+    // AddDrinkActivity.java related
+    static Tab currentTab;
+    static String currentTabKey;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,15 +71,59 @@ public class MenuActivity extends android.support.v4.app.FragmentActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
+        currentTab = null;
+        currentTabKey = null;
         mAuth = FirebaseAuth.getInstance();
         fragmentManager = getSupportFragmentManager();
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         // set home as default fragment
-        fragmentManager.beginTransaction().replace(R.id.content_frame, new HomeFragment(), "homeFragment").commit();
         navigationView.setCheckedItem(R.id.nav_home);
         navigationView.setNavigationItemSelectedListener(this);
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get User object and use the values to update the UI
+                user = dataSnapshot.getValue(User.class);
+                if (user == null) {
+                    signOut();
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        usersDB = FirebaseDatabase.getInstance().getReference().child("users").child(getUid());
+        userTabsDB = FirebaseDatabase.getInstance().getReference().child("user-tabs").child(getUid());
+        usersDB.getRef().addValueEventListener(userListener);
+        scheduleClient = new ScheduleClient(this);
+        scheduleClient.doBindService();
+
+        ValueEventListener tabsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                tabsList.clear();
+                tabStrings.clear();
+                // loop 1 tab at a time
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Tab tab = ds.getValue(Tab.class);
+                    tabsList.add(tab);
+                    tabStrings.add(ds.getKey());
+                    // We need to search for an open tab if found add a drink to this tab
+                    // if not open one in to it
+                    if (tab.getTabCloseDate().equals("Not Yet")) {
+                        currentTab = tab;
+                        currentTabKey = ds.getKey();
+                    }
+                    fragmentManager.beginTransaction().replace(R.id.content_frame, new HomeFragment(), "homeFragment").commit();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        userTabsDB.getRef().addValueEventListener(tabsListener);
     }
 
     @Override
@@ -117,21 +180,14 @@ public class MenuActivity extends android.support.v4.app.FragmentActivity
             fragmentManager.beginTransaction().replace(R.id.content_frame, new StatisticFragment(), "statisticsFragment").commit();
         } else if (id == R.id.nav_Driver) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new DriveFragment(), "driveFragment").commit();
-        } else if (id == R.id.nav_settings) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new HomeFragment(), "settingsFragment").commit();
         } else if (id == R.id.nav_Hangover) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new HomeFragment(), "hangoverFragment").commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new HangoverFragment(), "hangoverFragment").commit();
         } else if (id == R.id.nav_Info) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new InfoFragment(), "infoFragment").commit();
         } else if (id == R.id.nav_Emergency_Contact) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new EmergencyContactFragment(), "emergencyFragment").commit();
         } else if (id == R.id.nav_signOut) {
-            mAuth.signOut();
-            // Go to SignInActivity
-            Intent intent = new Intent(this, SignInActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
+            signOut();
         } else if (id == R.id.nav_share) {
             Resources resources = getResources();
 
@@ -190,5 +246,30 @@ public class MenuActivity extends android.support.v4.app.FragmentActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void signOut() {
+        mAuth.signOut();
+        // Go to SignInActivity
+        Intent intent = new Intent(this, SignInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     * @param cal - the time in which the notification is due
+     * @param msg - a message for the body of the notification
+     */
+     public void createNotification(Calendar cal, String msg) {
+        scheduleClient.getmBoundService().setNotificationString(msg);
+        scheduleClient.setAlarmForNotification(cal);
+    }
+
+    @Override
+    public void onStop() {
+        if(scheduleClient != null)
+            scheduleClient.doUnbindService();
+        super.onStop();
     }
 }

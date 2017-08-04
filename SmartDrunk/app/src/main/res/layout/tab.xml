@@ -12,6 +12,14 @@
         android:baselineAligned="false"
         android:orientation="horizontal">
 
+        <ImageView
+            android:id="@+id/tabLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/tablogo"
+            android:src="@mipmap/ic_tab"
+            android:visibility="visible" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -19,18 +27,18 @@
 
             <TextView
                 android:id="@+id/openDate"
-                android:layout_width="match_parent"
+                android:layout_width="263dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Open Date: "
+                android:text="@string/open_date"
+
                 android:textColor="@color/colorPrimaryDark2" />
 
             <TextView
                 android:id="@+id/closeDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="TextView"
+
+                android:text="@string/Close_Date"
                 android:textColor="@color/colorPrimaryDark2"
                 tools:text="Close Date :" />
 
@@ -38,25 +46,19 @@
                 android:id="@+id/MaxBAC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="TextView"
+                android:text="@string/textview"
                 android:textColor="@color/colorPrimaryDark2"
                 tools:text="Max BAC:" />
 
         </LinearLayout>
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/imagehungover"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/imagehungover"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:srcCompat="@android:drawable/presence_invisible" />
-        </LinearLayout>
+            android:contentDescription="@string/washangoversign"
+            android:visibility="visible"
+            android:src="@android:drawable/presence_invisible" />
 
     </LinearLayout>
 

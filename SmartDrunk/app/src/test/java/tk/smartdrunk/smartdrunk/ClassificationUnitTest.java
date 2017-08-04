@@ -15,7 +15,7 @@ import static tk.smartdrunk.smartdrunk.classifier_LDA.BAC_LDA.round;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class ClassificationUnitTest {
 
     /*tabs were created here without dates since they are irrelevant*/
 
@@ -175,7 +175,7 @@ public class ExampleUnitTest {
 
     @Test
     public void round2() throws Exception {
-        System.out.print(round(0.45, 1));
-        assertEquals("", 0.5, round(0.45, 1), 0);
+        System.out.print(round(0.45555555555555, 5));
+        assertEquals("", 0.45556, round(0.45555555555555, 5), 0);
     }
 }

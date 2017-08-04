@@ -1,4 +1,4 @@
-package tk.smartdrunk.smartdrunk;
+package tk.smartdrunk.smartdrunk.loginAndRegister;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.VideoView;
 
-import tk.smartdrunk.smartdrunk.loginAndRegister.SignInActivity;
+import tk.smartdrunk.smartdrunk.R;
 
 public class LauncherActivity extends Activity {
 
@@ -37,8 +37,8 @@ public class LauncherActivity extends Activity {
 
         //Displays an intro video file
         getWindow().setFormat(PixelFormat.UNKNOWN);
-        VideoView videoView = (VideoView)findViewById(R.id.videoView);
-        String uriPath = "android.resource://tk.smartdrunk.smartdrunk/"+R.raw.intro_smartdrunk;
+        VideoView videoView = (VideoView) findViewById(R.id.videoView);
+        String uriPath = "android.resource://tk.smartdrunk.smartdrunk/" + R.raw.intro_smartdrunk;
         Uri uri = Uri.parse(uriPath);
         videoView.setVideoURI(uri);
         videoView.requestFocus();
@@ -48,7 +48,7 @@ public class LauncherActivity extends Activity {
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer vmp) {
-                Intent in = new Intent(LauncherActivity.this,SignInActivity.class);
+                Intent in = new Intent(LauncherActivity.this, SignInActivity.class);
                 in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(in);
                 finish();

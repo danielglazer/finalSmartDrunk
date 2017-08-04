@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
 
-    tools:context="tk.smartdrunk.smartdrunk.AddDrinkActivity">
+    tools:context="tk.smartdrunk.smartdrunk.appMenu.AddDrinkActivity">
 
     <TextView
         android:id="@+id/title"
@@ -32,7 +32,6 @@
         android:hint="@string/volume_of_drinl_ml"
         android:inputType="number"
         android:maxLength="4"
-        android:textColor="@color/black"
         android:textSize="22sp" />
 
     <EditText

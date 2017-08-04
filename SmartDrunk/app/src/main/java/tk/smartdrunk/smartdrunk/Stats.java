@@ -1,10 +1,12 @@
+package tk.smartdrunk.smartdrunk;
+
 /**
  * Created by Alon on 6/11/2017.
  */
 
 public class Stats {
 //    public static void tabsBAC(ArrayList<Tab> tabs) {
-//        GraphView graph = (GraphView) findViewById(R.id.graph);
+//        GraphView graph = (GraphView) graph.findViewById();
 //        DataPoint[] dataPoints = new DataPoint[tabs.size()];
 //        for (int i = 0; i < tabs.size(); i++)
 //            dataPoints[i] = new DataPoint(i, tabs.get(i).bac);
@@ -33,6 +35,6 @@ public class Stats {
 //        // draw values on top
 //        series.setDrawValuesOnTop(true);
 //        series.setValuesOnTopColor(Color.RED);
-//        //series.setValuesOnTopSize(50);
-//    }
-}
+//        series.setValuesOnTopSize(50);
+    }
+//}

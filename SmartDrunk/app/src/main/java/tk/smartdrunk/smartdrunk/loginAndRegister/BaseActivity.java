@@ -1,4 +1,4 @@
-package tk.smartdrunk.smartdrunk;
+package tk.smartdrunk.smartdrunk.loginAndRegister;
 
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;

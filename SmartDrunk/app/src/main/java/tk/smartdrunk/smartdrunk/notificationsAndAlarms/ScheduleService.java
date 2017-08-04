@@ -19,6 +19,7 @@ public class ScheduleService extends Service {
     }
 
     private String notificationString;
+
     /**
      * Class for clients to access
      */
@@ -50,6 +51,6 @@ public class ScheduleService extends Service {
     public void setAlarm(Calendar c) {
         // This starts a new thread to set the alarm
         // You want to push off your tasks onto a new thread to free up the UI to carry on responding
-        new AlarmTask(this, c,notificationString).run();
+        new AlarmTask(this, c, notificationString).run();
     }
 }

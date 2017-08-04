@@ -43,7 +43,6 @@ public class AlarmTask implements Runnable {
         // Request to start are service when the alarm date is upon us
         // We don't start an activity as we just want to pop up a notification into the system bar not a full activity
         Intent intent = new Intent(context, NotifyService.class);
-        intent.putExtra(NotifyService.INTENT_NOTIFY, true);
         intent.putExtra("msg", msg);
         PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
 

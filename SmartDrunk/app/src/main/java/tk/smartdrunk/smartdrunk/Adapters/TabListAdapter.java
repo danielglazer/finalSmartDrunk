@@ -1,4 +1,4 @@
-package tk.smartdrunk.smartdrunk;
+package tk.smartdrunk.smartdrunk.Adapters;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
@@ -6,12 +6,15 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
+import tk.smartdrunk.smartdrunk.R;
 import tk.smartdrunk.smartdrunk.models.Tab;
 
 /**
@@ -25,7 +28,7 @@ public class TabListAdapter extends ArrayAdapter<Tab> {
     private int lastPosition = -1;
 
     private static class ViewHolder {
-
+        ImageView tabLogo;
         ImageView hungover;
         TextView closeDate;
         TextView openDate;
@@ -65,6 +68,7 @@ public class TabListAdapter extends ArrayAdapter<Tab> {
             holder.openDate = (TextView) convertView.findViewById(R.id.openDate);
             holder.closeDate = (TextView) convertView.findViewById(R.id.closeDate);
             holder.hungover = (ImageView) convertView.findViewById(R.id.imagehungover);
+            holder.tabLogo = (ImageView) convertView.findViewById(R.id.tabLogo);
 
             result = convertView;
 
@@ -74,7 +78,9 @@ public class TabListAdapter extends ArrayAdapter<Tab> {
 
             result = convertView;
         }
-
+        Animation animation = AnimationUtils.loadAnimation(mContext,
+                (position > lastPosition) ? R.anim.load_down_anim : R.anim.load_up_anim);
+        result.startAnimation(animation);
         lastPosition = position;
 
         String stringBAC = String.valueOf(tab.getMaxBAC());
@@ -87,8 +93,7 @@ public class TabListAdapter extends ArrayAdapter<Tab> {
             case "Yes": holder.hungover.setImageResource(android.R.drawable.presence_online);break;
             case "No": holder.hungover.setImageResource(android.R.drawable.presence_busy);break;
         }
-
-
+        //holder.tabLogo.setImageResource(R.mipmap.ic_tab);
         return convertView;
     }
 }

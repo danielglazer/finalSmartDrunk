@@ -11,8 +11,6 @@ public class Drink {
     private int drinkNumber; // number of shots for example
     private String drinkDate; // the date in a simple date format as defined in AddDrink.java
 
-    //private String servingSize, drinkType;
-
     /*Constructors*/
     public Drink() {
         // Default constructor required for calls to DataSnapshot.getValue(Drink.class)
@@ -26,34 +24,68 @@ public class Drink {
     }
 
     /*Getters and setters*/
+
+    /**
+     *
+     * @return drinkVolume
+     */
     public int getDrinkVolume() {
         return drinkVolume;
     }
 
+    /**
+     * set the drink volume
+     *
+     * @param drinkVolume
+     */
     public void setDrinkVolume(int drinkVolume) {
         this.drinkVolume = drinkVolume;
     }
 
+    /**
+     * @return alcohol percents in the drink
+     */
     public double getAlcoholVolume() {
         return alcoholVolume;
     }
 
+    /**
+     * set alcohol percents
+     *
+     * @param alcoholVolume
+     */
     public void setAlcoholVolume(double alcoholVolume) {
         this.alcoholVolume = alcoholVolume;
     }
 
+    /**
+     * @return number of drinks
+     */
     public int getDrinkNumber() {
         return drinkNumber;
     }
 
+    /**
+     * set number of drinks
+     *
+     * @param drinkNumber
+     */
     public void setDrinkNumber(int drinkNumber) {
         this.drinkNumber = drinkNumber;
     }
 
+    /**
+     * @return drinkDate
+     */
     public String getDrinkDate() {
         return drinkDate;
     }
 
+    /**
+     * set drinkDate
+     *
+     * @param drinkDate
+     */
     public void setDrinkDate(String drinkDate) {
         this.drinkDate = drinkDate;
     }

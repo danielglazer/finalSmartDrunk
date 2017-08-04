@@ -31,33 +31,29 @@
             android:icon="@drawable/ic_info_black_24dp"
             android:title="@string/info_credits"/>
     </group>
-    <item android:title="Options">
+    <item android:title="@string/options">
         <menu>
             <group android:checkableBehavior="single">
-            <item
-                android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="@string/settings" />
-            <item
+                <item
                 android:id="@+id/nav_signOut"
                 android:icon="@drawable/ic_action_name"
-                android:title="Sign out" />
+                android:title="@string/sign_out" />
             </group>
         </menu>
     </item>
-    <item android:title="Communicate">
+    <item android:title="@string/communicate">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share"
+                android:title="@string/share"
                 android:actionProviderClass=
                     "android.widget.ShareActionProvider"/>
             <group android:checkableBehavior="single">
             <item
                 android:id="@+id/nav_Emergency_Contact"
                 android:icon="@drawable/ic_action_contact"
-                android:title="Emergency Contact" />
+                android:title="@string/emergency_contact" />
             </group>
         </menu>
     </item>

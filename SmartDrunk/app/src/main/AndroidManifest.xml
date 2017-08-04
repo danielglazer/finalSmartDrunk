@@ -216,7 +216,7 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LauncherActivity"
+            android:name=".loginAndRegister.LauncherActivity"
             android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -235,7 +235,7 @@
             android:label="@string/title_activity_menu"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme"></activity>
-        <activity android:name=".AddDrinkActivity"></activity>
+        <activity android:name=".appMenu.AddDrinkActivity"></activity>
 
         <service android:name=".notificationsAndAlarms.ScheduleService" />
         <service android:name=".notificationsAndAlarms.NotifyService" />

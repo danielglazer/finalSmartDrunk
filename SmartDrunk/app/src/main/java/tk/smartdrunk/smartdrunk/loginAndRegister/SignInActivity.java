@@ -14,7 +14,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import tk.smartdrunk.smartdrunk.BaseActivity;
 import tk.smartdrunk.smartdrunk.R;
 import tk.smartdrunk.smartdrunk.appMenu.MenuActivity;
 
@@ -90,11 +89,6 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void onAuthSuccess() {
-
-        //Todo: verify email to continue to the app
-        // Check if user's email is verified
-//        boolean emailVerified = user.isEmailVerified();
-
         // Go to MainActivity
         startActivity(new Intent(SignInActivity.this, MenuActivity.class));
         finish();

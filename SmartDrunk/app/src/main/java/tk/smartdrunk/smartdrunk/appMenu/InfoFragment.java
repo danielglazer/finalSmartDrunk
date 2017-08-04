@@ -14,12 +14,12 @@ import tk.smartdrunk.smartdrunk.R;
 public class InfoFragment extends android.support.v4.app.Fragment {
 
     private static final String TAG = "InfoFragment";
-    
-    View my_view ;
+
+    View my_view;
+
     @Nullable
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        my_view=inflater.inflate(R.layout.activity_info, container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        my_view = inflater.inflate(R.layout.info_fragment, container, false);
         Button contact = (Button) my_view.findViewById(R.id.Contact_Button);
         contact.setOnClickListener(new View.OnClickListener() {
             @Override

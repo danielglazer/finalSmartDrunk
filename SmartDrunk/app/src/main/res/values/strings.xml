@@ -68,7 +68,7 @@
     <string name="home_title">Home</string>
     <string name="title_activity_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="emergency_options">Emergency Options</string>
     <string name="emergency_call">Emergency Call</string>
@@ -88,13 +88,32 @@
     <string name="possible_alcoholic_beverages">Possible Alcoholic Beverages:</string>
     <!--Those are the text for the Share option in the app-->
     <string name="share_email_native">I want to let you know about new exciting app I stumbled into called SmartDrunk.
-    Check it out :</string>
-    <string name="share_email_subject">New exciting app called SmartDrunk</string>
+    Check it out :)</string>
+    <string name="share_email_subject">New exciting app called SmartDrunk!</string>
     <string name="share_chooser_text">Share SmartDrunk with your friends!</string>
-    <string name="share_twitter">heloo3</string>
-    <string name="share_facebook">heloo2</string>
-    <string name="share_sms">heloo1</string>
-    <string name="share_email_gmail">heloo</string>
+    <string name="share_twitter">New exciting app called SmartDrunk:)</string>
+    <string name="share_facebook">New exciting app called SmartDrunk:)</string>
+    <string name="share_sms">New exciting app called SmartDrunk:)</string>
+    <string name="share_email_gmail">New exciting app called SmartDrunk:)</string>
     <string name="volume_of_drinl_ml">Volume of drink(ml)</string>
     <string name="volume_of_alcohol">Volume of alcohol(%)</string>
+    <string name="_00">00</string>
+    <string name="seconds">Seconds</string>
+    <string name="hours">Hours</string>
+    <string name="days">Days</string>
+    <string name="minutes">Minutes</string>
+    <string name="legally_can_drive">The estimation of your BAC says you are now legally qualify for driving!</string>
+    <string name="the_hangover_feature_title">The Hangover Feature</string>
+    <string name="have_no_separator">Currently you have no separator value that helps you avoid hangovers... you should add more data so we can create one for you</string>
+    <string name="logo">Logo</string>
+    <string name="communicate">Communicate</string>
+    <string name="emergency_contact">Emergency Contact</string>
+    <string name="options">Options</string>
+    <string name="share">Share</string>
+    <string name="sign_out">Sign out</string>
+    <string name="textview">TextView</string>
+    <string name="tablogo">tabLogo</string>
+    <string name="open_date">Open Date:</string>
+    <string name="washangoversign">wasHangoverSign</string>
+    <string name="Close_Date">Close Date:</string>
 </resources>

@@ -15,9 +15,6 @@ import java.util.Map;
 // [START Tab_class]
 public class Tab {
 
-    //public Map<String,DrinkOccasion> drinkOccasionMap;
-    //public double satisfaction; ///between 0 to 5 stars
-
     private String tabOpenDate;
     private String tabCloseDate; // simple date string or "Not Yet"
     private String wasHangover; // can store the values: 'Yes', 'No' or 'Not Supplied'
@@ -47,34 +44,67 @@ public class Tab {
     }
 
     /*Getters and Setters*/
+
+    /**
+     * @return tabOpenDate
+     */
     public String getTabOpenDate() {
         return tabOpenDate;
     }
 
+    /**
+     * set tabOpenDate
+     *
+     * @param tabOpenDate
+     */
     public void setTabOpenDate(String tabOpenDate) {
         this.tabOpenDate = tabOpenDate;
     }
 
+    /**
+     * @return tabCloseDate
+     */
     public String getTabCloseDate() {
         return tabCloseDate;
     }
 
+    /**
+     * set tabCloseDate
+     *
+     * @param tabCloseDate
+     */
     public void setTabCloseDate(String tabCloseDate) {
         this.tabCloseDate = tabCloseDate;
     }
 
+    /**
+     * @return maxBAC
+     */
     public double getMaxBAC() {
         return maxBAC;
     }
 
+    /**
+     * set maxBAC
+     *
+     * @param maxBAC
+     */
     public void setMaxBAC(double maxBAC) {
         this.maxBAC = maxBAC;
     }
 
+    /**
+     * @return wasHangover
+     */
     public String getWasHangover() {
         return wasHangover;
     }
 
+    /**
+     * set wasHangover
+     *
+     * @param wasHangover
+     */
     public void setWasHangover(String wasHangover) {
         this.wasHangover = wasHangover;
     }

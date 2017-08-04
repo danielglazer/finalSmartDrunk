@@ -24,13 +24,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
-import tk.smartdrunk.smartdrunk.BaseActivity;
 import tk.smartdrunk.smartdrunk.R;
 import tk.smartdrunk.smartdrunk.appMenu.MenuActivity;
 import tk.smartdrunk.smartdrunk.models.User;
+
+import static tk.smartdrunk.smartdrunk.models.User.isValidDate;
 
 public class SignUpActivity extends BaseActivity implements View.OnClickListener {
 
@@ -55,35 +53,16 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
-        // Views
+        // Views and fields
         mEmailField = (EditText) findViewById(R.id.field_email);
         mPasswordField = (EditText) findViewById(R.id.field_password);
         mWeightField = (EditText) findViewById(R.id.field_weight);
         genderTextView = (TextView) findViewById(R.id.genderTextView);
         genderRadioGroup = (RadioGroup) findViewById(R.id.genderRadioGroup);
         mBirthDateField = (EditText) findViewById(R.id.birthEditText);
-//        mBirthDateField.addTextChangedListener(new TextWatcher() {
-//            public void afterTextChanged(Editable s) {
-//
-//                // change year acording to edit text value
-//                birthDate.init(parseInt(mBirthDateField.getText().toString()),birthDate.getDayOfMonth(),
-//                        birthDate.getDayOfMonth(),null);
-//
-//            }
-//
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                //no op
-//            }
-//
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                //no op
-//            }
-//
-//        });
         emergencyContact =(QuickContactBadge) findViewById(R.id.emergencyContact);
         newDriverSwitch = (Switch) findViewById(R.id.newDriverSwitch);
         emergencyContact.setImageToDefault();
-        //new QuickContactHelper(this, emergencyContact, "213").addThumbnail();
         emergencyContact.setOnClickListener(this);
         findViewById(R.id.button_sign_up).setOnClickListener(this);
     }
@@ -168,16 +147,6 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
         return result;
     }
 
-    private boolean isValidDate(String dateString) {
-        SimpleDateFormat df = new SimpleDateFormat("MM.dd.yyyy");
-        try {
-            df.parse(dateString);
-            return true;
-        } catch (ParseException e) {
-            return false;
-        }
-    }
-
     void pickContact(){
         Intent intent1 = new Intent(Intent.ACTION_PICK);
         intent1.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
@@ -200,35 +169,10 @@ public class SignUpActivity extends BaseActivity implements View.OnClickListener
                             null, null, null);
 
                         if (c != null && c.moveToFirst()) {
-                            //Todo: add the photo of the selected emergency contact
-//                           byte[] bytedata = c.getBlob(2);
-//                            if (bytedata != null) {
-//                                emergencyContact.setImageBitmap(BitmapFactory.decodeStream(new ByteArrayInputStream(bytedata)));
-//                                InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver()
-//                                        , uri);
-//                                emergencyContact.setImageBitmap(BitmapFactory.decodeStream(input));
-//                            }
-//
-//                                Uri contactUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(ContactsContract.Contacts._ID));
-//                                QuickContactBadge badge = (QuickContactBadge) findViewById(R.id.emergencyContact);
-//                                badge.setMode(ContactsContract.QuickContact.MODE_LARGE);
-//                                badge.assignContactUri(contactUri);
-//                                Uri photoUri = Uri.parse(c.getString(c.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI)));
-//                                        emergencyContact.setImageURI(photoUri);
-//                            }
-//                            Uri person = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long
-//                                    .parseLong(getId()));
-//                            Uri.withAppendedPath(person, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-//                            if (u != null) {
-//                                emergencyContact.setImageURI(u);
-//                            } else {
-//                                emergencyContact.setImageResource(R.drawable.ic_action_contact);
-//                            }
                             TextView nameText =(TextView) findViewById(R.id.contact_name);
                             nameText.setText(c.getString(1));
                             TextView numberText = (TextView)findViewById(R.id.contact_number);
                             numberText.setText(c.getString(0));
-
                         }
                 } finally {
                     if (c != null) {
